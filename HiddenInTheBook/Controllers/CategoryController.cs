@@ -40,6 +40,7 @@ namespace HiddenInTheBook.Controllers
             {
                 _db.Categories.Add(obj);
                 _db.SaveChanges();
+                TempData["success"] = "Category Added sucessfully";
                 return RedirectToAction("Index");
             }
             return View(obj);
@@ -75,6 +76,7 @@ namespace HiddenInTheBook.Controllers
             {
                 _db.Categories.Update(obj);
                 _db.SaveChanges();
+                TempData["success"] = "Category Updated sucessfully";
                 return RedirectToAction("Index");
             }
             return View(obj);
@@ -110,6 +112,7 @@ namespace HiddenInTheBook.Controllers
             }
             _db.Categories.Remove(categoryId);
             _db.SaveChanges();
+            //TempData["success"] = "Category Deleted sucessfully";
             return RedirectToAction("Index");
         }
     }
