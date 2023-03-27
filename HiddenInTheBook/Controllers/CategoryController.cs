@@ -101,18 +101,18 @@ namespace HiddenInTheBook.Controllers
         }
 
         //POST
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DeletePOST(int? id)
         {
-            var categoryId = _db.Categories.Find(id);
-            if (categoryId == null)
+            var obj = _db.Categories.Find(id);
+            if (obj == null)
             {
                 return NotFound();
             }
-            _db.Categories.Remove(categoryId);
+            _db.Categories.Remove(obj);
             _db.SaveChanges();
-            //TempData["success"] = "Category Deleted sucessfully";
+            TempData["success"] = "Category Deleted sucessfully";
             return RedirectToAction("Index");
         }
     }
