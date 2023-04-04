@@ -1,14 +1,15 @@
 ﻿using HiddenInTheBook.DataAccess.Data;
 using HiddenInTheBook.Models;
+using HiddenInTheBook.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HiddenInTheBook.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly ICategoryRepository _db;
 
-        public CategoryController(ApplicationDbContext db)
+        public CategoryController(ICategoryRepository db)
         {
             _db = db;
         }
@@ -16,7 +17,7 @@ namespace HiddenInTheBook.Controllers
         //Read operation for category
         public IActionResult Index()
         {
-            IEnumerable<Category> objCategoryList = _db.Categories.ToList();
+            IEnumerable<Category> objCategoryList = _db.GetAll();
             return View(objCategoryList);
         }
 
@@ -38,8 +39,8 @@ namespace HiddenInTheBook.Controllers
             }
             if(ModelState.IsValid)
             {
-                _db.Categories.Add(obj);
-                _db.SaveChanges();
+                _db.Add(obj);
+                _db.Save();
                 TempData["success"] = "Category Added sucessfully";
                 return RedirectToAction("Index");
             }
@@ -55,7 +56,8 @@ namespace HiddenInTheBook.Controllers
             {
                 return NotFound();
             }
-            var categoryFromDb = _db.Categories.Find(id);
+            //var categoryFromDb = _db.Categories.Find(id);
+            var categoryFromDb = _db.GetFirstOrDefault(u=>u.Name == "id");
             
             if (categoryFromDb == null){
                 return NotFound();
@@ -74,8 +76,8 @@ namespace HiddenInTheBook.Controllers
             }
             if (ModelState.IsValid)
             {
-                _db.Categories.Update(obj);
-                _db.SaveChanges();
+                _db.Update(obj);
+                _db.Save();
                 TempData["success"] = "Category Updated sucessfully";
                 return RedirectToAction("Index");
             }
@@ -91,13 +93,13 @@ namespace HiddenInTheBook.Controllers
             {
                 return NotFound();
             }
-            var categoryFromDb = _db.Categories.Find(id);
+            var categoryFromDbFirst = _db.GetFirstOrDefault(u => u.Id==id);
 
-            if (categoryFromDb == null)
+            if (categoryFromDbFirst == null)
             {
                 return NotFound();
             }
-            return View(categoryFromDb);
+            return View(categoryFromDbFirst);
         }
 
         //POST
@@ -105,13 +107,13 @@ namespace HiddenInTheBook.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePOST(int? id)
         {
-            var obj = _db.Categories.Find(id);
+            var obj = _db.GetFirstOrDefault(u => u.Id == id);
             if (obj == null)
             {
                 return NotFound();
             }
-            _db.Categories.Remove(obj);
-            _db.SaveChanges();
+            _db.Remove(obj);
+            _db.Save();
             TempData["success"] = "Category Deleted sucessfully";
             return RedirectToAction("Index");
         }
