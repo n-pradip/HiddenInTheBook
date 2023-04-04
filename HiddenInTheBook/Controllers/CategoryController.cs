@@ -1,5 +1,4 @@
-﻿using HiddenInTheBook.DataAccess.Data;
-using HiddenInTheBook.Models;
+﻿using HiddenInTheBook.Models;
 using HiddenInTheBook.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -57,7 +56,7 @@ namespace HiddenInTheBook.Controllers
                 return NotFound();
             }
             //var categoryFromDb = _db.Categories.Find(id);
-            var categoryFromDb = _db.GetFirstOrDefault(u=>u.Name == "id");
+            var categoryFromDb = _db.GetFirstOrDefault(u=>u.Id == id);
             
             if (categoryFromDb == null){
                 return NotFound();
