@@ -36,12 +36,13 @@ namespace HiddenInTheBook.Repository
 
         public void Remove(T entity)
         {
-            dbSet.RemoveRange(entity);
+            dbSet.Remove(entity);
         }
 
         public void RemoveRange(IEnumerable<T> entity)
         {
-            throw new NotImplementedException();
+            dbSet.RemoveRange(entity);
+
         }
     }
 }

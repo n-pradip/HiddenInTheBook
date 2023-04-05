@@ -2,22 +2,22 @@
 using HiddenInTheBook.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HiddenInTheBook.Controllers
+namespace HiddenInTheBook.Areas.Admin.Controllers
 {
-    public class CategoryController : Controller
+    public class CoverTypeController : Controller
     {
-        private readonly ICategoryRepository _db;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoryController(ICategoryRepository db)
+        public CoverTypeController(IUnitOfWork unitOfWork)
         {
-            _db = db;
+            _unitOfWork = unitOfWork;
         }
 
         //Read operation for category
         public IActionResult Index()
         {
-            IEnumerable<Category> objCategoryList = _db.GetAll();
-            return View(objCategoryList);
+            IEnumerable<CoverType> objCoverTypeList = _unitOfWork.CoverType.GetAll();
+            return View(objCoverTypeList);
         }
 
         //GET
@@ -30,17 +30,13 @@ namespace HiddenInTheBook.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Category obj)
+        public IActionResult Create(CoverType obj)
         {
-            if(obj.Name == obj.DisplayOrder.ToString())
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError("CustomError", "The DisplayOrder and Name connot match exactly");
-            }
-            if(ModelState.IsValid)
-            {
-                _db.Add(obj);
-                _db.Save();
-                TempData["success"] = "Category Added sucessfully";
+                _unitOfWork.CoverType.Add(obj);
+                _unitOfWork.Save();
+                TempData["success"] = "Cover Type Added sucessfully";
                 return RedirectToAction("Index");
             }
             return View(obj);
@@ -51,33 +47,30 @@ namespace HiddenInTheBook.Controllers
         //GET
         public IActionResult Edit(int? id)
         {
-            if(id == null || id == 0)
+            if (id == null || id == 0)
             {
                 return NotFound();
             }
             //var categoryFromDb = _db.Categories.Find(id);
-            var categoryFromDb = _db.GetFirstOrDefault(u=>u.Id == id);
-            
-            if (categoryFromDb == null){
+            var coverTypeFromDb = _unitOfWork.CoverType.GetFirstOrDefault(u => u.Id == id);
+
+            if (coverTypeFromDb == null)
+            {
                 return NotFound();
             }
-            return View(categoryFromDb);
+            return View(coverTypeFromDb);
         }
 
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Category obj)
+        public IActionResult Edit(CoverType obj)
         {
-            if (obj.Name == obj.DisplayOrder.ToString())
-            {
-                ModelState.AddModelError("CustomError", "The DisplayOrder and Name connot match exactly");
-            }
             if (ModelState.IsValid)
             {
-                _db.Update(obj);
-                _db.Save();
-                TempData["success"] = "Category Updated sucessfully";
+                _unitOfWork.CoverType.Update(obj);
+                _unitOfWork.Save();
+                TempData["success"] = "Cover Type Updated sucessfully";
                 return RedirectToAction("Index");
             }
             return View(obj);
@@ -92,13 +85,13 @@ namespace HiddenInTheBook.Controllers
             {
                 return NotFound();
             }
-            var categoryFromDbFirst = _db.GetFirstOrDefault(u => u.Id==id);
+            var coverTypeFromDbFirst = _unitOfWork.CoverType.GetFirstOrDefault(u => u.Id == id);
 
-            if (categoryFromDbFirst == null)
+            if (coverTypeFromDbFirst == null)
             {
                 return NotFound();
             }
-            return View(categoryFromDbFirst);
+            return View(coverTypeFromDbFirst);
         }
 
         //POST
@@ -106,14 +99,14 @@ namespace HiddenInTheBook.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePOST(int? id)
         {
-            var obj = _db.GetFirstOrDefault(u => u.Id == id);
+            var obj = _unitOfWork.CoverType.GetFirstOrDefault(u => u.Id == id);
             if (obj == null)
             {
                 return NotFound();
             }
-            _db.Remove(obj);
-            _db.Save();
-            TempData["success"] = "Category Deleted sucessfully";
+            _unitOfWork.CoverType.Remove(obj);
+            _unitOfWork.Save();
+            TempData["success"] = "Cover Type Deleted sucessfully";
             return RedirectToAction("Index");
         }
     }
