@@ -1,6 +1,7 @@
 ﻿using HiddenInTheBook.Models;
 using HiddenInTheBook.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HiddenInTheBook.Areas.Admin.Controllers
 {
@@ -21,7 +22,7 @@ namespace HiddenInTheBook.Areas.Admin.Controllers
             return View(objCoverTypeList);
         }
 
-        
+
 
         //Update operation for category
 
@@ -29,15 +30,28 @@ namespace HiddenInTheBook.Areas.Admin.Controllers
         public IActionResult Upsert(int? id)
         {
             Product product = new();
+            IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.GetAll().Select(
+                u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                });
+            IEnumerable<SelectListItem> CoverTypeList = _unitOfWork.CoverType.GetAll().Select(
+                u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                });
             if (id == null || id == 0)
             {
+                ViewBag.CategoryList = CategoryList;
                 return View(product);
             }
             else
             {
 
             }
-            
+
             return View(product);
         }
 
