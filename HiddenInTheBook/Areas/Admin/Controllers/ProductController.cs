@@ -1,4 +1,5 @@
 ﻿using HiddenInTheBook.Models;
+using HiddenInTheBook.Models.ViewModels;
 using HiddenInTheBook.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -29,40 +30,43 @@ namespace HiddenInTheBook.Areas.Admin.Controllers
         //GET
         public IActionResult Upsert(int? id)
         {
-            Product product = new();
-            IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.GetAll().Select(
-                u => new SelectListItem
+            ProductVM productVM = new()
+            {
+                Product = new(),
+                CategoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem
                 {
-                    Text = u.Name,
-                    Value = u.Id.ToString()
-                });
-            IEnumerable<SelectListItem> CoverTypeList = _unitOfWork.CoverType.GetAll().Select(
-                u => new SelectListItem
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                }),
+                CoverTypeList = _unitOfWork.CoverType.GetAll().Select(i => new SelectListItem
                 {
-                    Text = u.Name,
-                    Value = u.Id.ToString()
-                });
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                }),
+            };
             if (id == null || id == 0)
             {
-                ViewBag.CategoryList = CategoryList;
-                return View(product);
+                //ViewBag.CategoryList = CategoryList;
+
+                //ViewData["CoverTypeList"] = CoverTypeList;
+                return View(productVM);
             }
             else
             {
 
             }
 
-            return View(product);
+            return View(productVM);
         }
 
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(CoverType obj)
+        public IActionResult Upsert(ProductVM obj, IFormFile file)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.CoverType.Update(obj);
+                //_unitOfWork.CoverType.Update(obj);
                 _unitOfWork.Save();
                 TempData["success"] = "Cover Type Updated sucessfully";
                 return RedirectToAction("Index");
