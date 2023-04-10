@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -31,13 +32,15 @@ namespace HiddenInTheBook.Models
         [Required]
         [Range(1, 1000)]
         public double Price100 { get; set; }
-
+        [ValidateNever]
         public string ImageUrl { get; set; }
 
         public int CategoryId { get; set; }
+        [ValidateNever]
         public Category Category { get; set; }
 
         public int CoverTypeId { get; set; }
+        [ValidateNever]
         public CoverType CoverType { get; set; }
     }
 }
