@@ -114,7 +114,7 @@ namespace HiddenInTheBook.Areas.Admin.Controllers
 		//POST
 		[HttpDelete]
 		public IActionResult Delete(int? id)
-		{
+		 {
 			var obj = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
 			if (obj == null)
 			{
