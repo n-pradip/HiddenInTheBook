@@ -23,7 +23,20 @@ namespace HiddenInTheBook.Areas.Customer.Controllers
             return View(productList);
         }
 
-        public IActionResult Privacy()
+		public IActionResult Details(int id)
+		{
+			ShoppingCart cartObj = new()
+			{
+				Count = 1,
+				//ProductId = productId,
+				Product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id, includeProperties: "Category,CoverType"),
+			};
+
+			return View(cartObj);
+		}
+
+
+		public IActionResult Privacy()
         {
             return View();
         }
