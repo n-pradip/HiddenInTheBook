@@ -28,7 +28,6 @@ namespace HiddenInTheBook.Areas.Customer.Controllers
 			ShoppingCart cartObj = new()
 			{
 				Count = 1,
-				//ProductId = productId,
 				Product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id, includeProperties: "Category,CoverType"),
 			};
 
