@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HiddenInTheBook.DataAccess\HiddenInTheBook.DataAccess.csproj" />
     <ProjectReference Include="..\HiddenInTheBook.Models\HiddenInTheBook.Models.csproj" />
+    <ProjectReference Include="..\HiddenInTheBook.Utility\HiddenInTheBook.Utility.csproj" />
   </ItemGroup>
 
   <ItemGroup>
